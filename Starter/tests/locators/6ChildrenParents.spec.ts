@@ -1,18 +1,18 @@
 import { test, expect } from '@playwright/test';
 
-// locators return locators
+
 test('Child locators', async ({ page }) => {
     await page.goto('')
 
     const servicesList = page.getByRole('list')
-    const serviceItems = await servicesList.getByRole('listitem').all();
+    const serviceItems = await servicesList.getByRole('listitem').all();    
     expect(serviceItems.length).toBeGreaterThan(0)
 
-    // with css locators:
+    // with css locators:  
     const serviceItems2 = await page.locator('ul > li').all()
     for (const item of serviceItems2) {
         console.log(await item.textContent())
-    } 
+    }   
 })
 
 test('Parent locators', async ({ page }) => {
@@ -22,25 +22,25 @@ test('Parent locators', async ({ page }) => {
     const cookieBanner = acceptCookiesButton.locator('..')
 
     await acceptCookiesButton.click();
-    await expect(cookieBanner).not.toBeVisible()
-
+    await expect(cookieBanner).not.toBeVisible()   
 })
 
 test('N-th element locator - buttons', async ({ page }) => {
     await page.goto('')
+    
+    const buttons = page.getByRole('button');
+    const acceptCookieButton = buttons.first()
+    const declineCookieButton = buttons.last()
 
-    const buttons = page.getByRole('button')
-    const acceptButton = buttons.first();
-    const declineButton = buttons.last();
-
-    await acceptButton.click()
-    await expect(declineButton).not.toBeVisible()
+    await acceptCookieButton.click()
+    await expect(declineCookieButton).not.toBeVisible()
 })
+
 
 test('N-th element locator - list items', async ({ page }) => {
     await page.goto('')
-
-    const listItems = page.getByRole('listitem')
+    
+    const listItems = page.getByRole('listitem');
     const thirdItem = listItems.nth(2)
 
     console.log(await thirdItem.textContent())
