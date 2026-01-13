@@ -118,3 +118,28 @@ function toggleOtherTextarea() {
 function submitForm(){
     return confirm('Do you really want to submit the form?')
 }
+
+
+// Clear currently focused form entry when Escape key is pressed
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        const activeElement = document.activeElement;
+        const feedbackForm = document.getElementById('feedbackForm');
+        
+        // Check if the active element is within our feedback form
+        if (feedbackForm.contains(activeElement) && activeElement.id) {
+            // Clear based on element type
+            if (activeElement.type === 'text' || activeElement.type === 'email' || activeElement.tagName.toLowerCase() === 'textarea') {
+                activeElement.value = '';
+                localStorage.removeItem(activeElement.id);
+            } else if (activeElement.type === 'select-multiple') {
+                Array.from(activeElement.options).forEach(option => option.selected = false);
+                activeElement.dispatchEvent(new Event('change'));
+                localStorage.removeItem(activeElement.id);
+            } else if (activeElement.type === 'checkbox') {
+                activeElement.checked = false;
+                localStorage.removeItem(activeElement.id);
+            }
+        }
+    }
+});
